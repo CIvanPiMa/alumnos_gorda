@@ -1,11 +1,18 @@
-import xlrd
+import os
+from utils import *
+from imc import *
 
-path = "data/5b.xlsx"
+os.chdir('./data')
+files = [file for file in os.listdir() if file[-1] == 'x']
 
-with xlrd.open_workbook(path) as file:
-    data = file.sheet_by_index(0)
+dict_data = {}
+for file in files:
+    dict_data = {**dict_data, **make_students_dict(file)}
 
-print(data.nrows)
+for name, data in dict_data.items():
+    imc, interp = interpret_imc_kids(
+        data['talla'], data['peso'], data['fecha'], 'm')
+    dict_data[name] = {**dict_data[name], **{'imc': imc, 'interp': interp}}
 
-
-print("\n"*5)
+for name, data in dict_data.items():
+    mesage = print(name, *data.values(), sep=',')

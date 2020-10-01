@@ -22,7 +22,7 @@ def interpret_imc_kids(talla, peso, fecha, sex):
     if fecha:
         edad = relativedelta(datetime.date.today(), fecha)
     else:
-        return -1, 'No hay fecha de nacimiento correcta'
+        return -1, 'Fecha de nacimiento incorrecta'
 
     edad_meses = edad.years * 12 + edad.months
     parametro = edad.months > 6
