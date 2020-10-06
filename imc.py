@@ -6,8 +6,6 @@ def get_imc(talla, peso):
 
     if not talla or not peso:
         return None
-    if talla == 0:
-        return -1
 
     imc = round(peso / (talla/100) ** 2, 1)
     return imc
@@ -17,17 +15,17 @@ def interpret_imc_kids(talla, peso, fecha, sex):
 
     imc = get_imc(talla, peso)
     if not imc:
-        return -1, 'Talla o peso incorrectos'
+        return None, 'Talla o peso incorrectos'
 
     if fecha:
         edad = relativedelta(datetime.date.today(), fecha)
     else:
-        return -1, 'Fecha de nacimiento incorrecta'
+        return None, 'Fecha de nacimiento incorrecta'
 
     edad_meses = edad.years * 12 + edad.months
     parametro = edad.months > 6
 
-    if sex == 'm':
+    if sex == 'h':
         dict_imc_kids = dct_imc_niños_5_18_años
     else:
         dict_imc_kids = dct_imc_niñas_5_18_años
@@ -35,7 +33,7 @@ def interpret_imc_kids(talla, peso, fecha, sex):
     try:
         lst_valores_imc = dict_imc_kids[(edad.years, parametro)]
     except KeyError:
-        return -1, 'Edad invalida ({} años con {} meses)'.format(edad.years, edad.months)
+        return None, 'Edad invalida ({} años con {} meses)'.format(edad.years, edad.months)
 
     ds, dm, n, s, o = lst_valores_imc
     dm0, dm1 = dm
